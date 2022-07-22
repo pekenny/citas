@@ -3,20 +3,31 @@ import React, { Fragment, useState, useEffect } from "react";
 const FIlterCitas = ({ citas, setGetCitas }) => {
   // estado para guardar input
 
-  const [fecha, setFecha] = useState("");
+  const [fecha, setFecha] = useState({
+    dia: "",
+    buscar: ""
+  });
+  
+  const {dia,buscar} = fecha;
 
   useEffect(() => {
-    filterCitas(fecha);
-  }, [fecha, citas]);
+    console.log(buscar)
+    filterCitas(dia, buscar);
+
+    
+  }, [dia, buscar,citas]);
 
   const addFecha = (e) => {
-    setFecha(e.target.value);
+    // setFecha(e.target.value);
+    setFecha({
+      [e.target.name]: e.target.value
+    });
   };
 
   //FIltrarCItas
 
-  const filterCitas = (fecha) => {
-    const citasFiltradas = citas.filter((e) => e.fecha === fecha);
+  const filterCitas = (dia, buscar) => {
+    const citasFiltradas = citas.filter((e) => e.fecha === dia || e.mascota.toLowerCase().indexOf(buscar) > -1);
     setGetCitas(citasFiltradas);
   };
 
@@ -26,10 +37,18 @@ const FIlterCitas = ({ citas, setGetCitas }) => {
 
       <input
         className="u-full-width"
-        name="fecha"
+        name="dia"
         type="date"
         onChange={addFecha}
-        value={fecha}
+        value={dia}
+      />
+      <input
+        className="u-full-width"
+        name="buscar"
+        type="text"
+        onChange={addFecha}
+        value={buscar}
+        placeholder="Buscar ..."
       />
     </Fragment>
   );
